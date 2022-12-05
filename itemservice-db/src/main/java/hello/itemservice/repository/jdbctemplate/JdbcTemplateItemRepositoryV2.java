@@ -67,7 +67,7 @@ public class JdbcTemplateItemRepositoryV2 implements ItemRepository {
                 .addValue("itemName", updateParam.getItemName())
                 .addValue("price", updateParam.getPrice())
                 .addValue("quantity", updateParam.getQuantity())
-                .addValue("id", itemId);
+                .addValue("id", itemId); //이 부분이 별도로 필요하다.
 
         template.update(sql, param);
     }
@@ -91,8 +91,6 @@ public class JdbcTemplateItemRepositoryV2 implements ItemRepository {
         Integer maxPrice = cond.getMaxPrice();
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(cond);
-
-
 
         String sql = "select id, item_name, price, quantity from item";
         //동적 쿼리
