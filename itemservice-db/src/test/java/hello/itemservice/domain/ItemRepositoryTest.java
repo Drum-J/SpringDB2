@@ -8,16 +8,38 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * 스프링에서 제공하는 @Transactional 은 TEST에서 사용할 때
+ * 예외적으로 테스트가 끝나면 트랜잭션을 자동 롤백 시킨다!
+ *
+ * 1. 트랜잭션 시작
+ * 2. 테스트 실행
+ * 3. 트랜잭션 롤백
+ */
+@Transactional
 @SpringBootTest
 class ItemRepositoryTest {
 
     @Autowired
     ItemRepository itemRepository;
+
+   /*
+   @Autowired
+    PlatformTransactionManager transactionManager;
+    TransactionStatus status; //롤백 하거나 할 때 필요해서 밖에 놔둠.
+
+    @BeforeEach
+    void beforeEach() {
+        //트랜잭션 시작
+        status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+    }
+    */
 
     @AfterEach
     void afterEach() {
@@ -25,6 +47,8 @@ class ItemRepositoryTest {
         if (itemRepository instanceof MemoryItemRepository) {
             ((MemoryItemRepository) itemRepository).clearStore();
         }
+        //트랜잭션 롤백
+        //transactionManager.rollback(status);
     }
 
     @Test
